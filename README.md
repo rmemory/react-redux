@@ -33,6 +33,8 @@ Step 3) Provide a mechanism to update state.
 
 If a function passes *all three* of these requirements, it’s a pure function. If it fails even *one* of these, then it’s an *impure* function.
 
+# State reducer composition
+
 Let's say we were dealing with a state tree like had this structure
 
 {
@@ -57,6 +59,7 @@ const reducer = combineReducers({
   settings,
   tweets
 })
+
 combineReducers, under the hood, is our first look at reducer composition. combineReducers is responsible for invoking all the other reducers, passing them the portion of their state that they care about. We're making one root reducer, by composing a bunch of other reducers together. With that in mind, let's take a closer look at our tweets reducer and how we can leverage reducer composition again to make it more compartmentalized. Specifically, let's look how a user might change their avatar with the way our store is currently structured. Here's the skeleton with what we'll start out with -
 
 function tweets (state = {}, action) {
@@ -69,6 +72,7 @@ function tweets (state = {}, action) {
         ???
   }
 }
+
 What we're interested in is that last one, UPDATE_AVATAR. This one is interesting because we have some nested data - and remember, reducers have to be pure and can't mutate any state. Here's one approach.
 
 function tweets (state = {}, action) {
